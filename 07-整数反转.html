@@ -1,0 +1,74 @@
+<!--
+ * @Author: wangzhiyu
+ * @Date: 2023-06-26 21:38:21
+ * @LastEditors: wangzhiyu
+ * @LastEditTime: 2023-07-26 22:13:05
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 给你一个 32 位的有符号整数 x ，返回将 x 中的数字部分反转后的结果。
+       *
+       * 如果反转后整数超过 32 位的有符号整数的范围 [−2的31次方,  2的31次方 − 1] ，就返回 0。
+       *
+       * 假设环境不允许存储 64 位整数（有符号或无符号）。
+       *
+       * 输入：x = 123
+       * 输出：321
+       *
+       * 输入：x = -123
+       * 输出：-321
+       *
+       * 输入：x = 120
+       * 输出：21
+       *
+       * 输入：x = 0
+       * 输出：0
+       */
+
+      /**
+       * @param {number} x
+       * @return {number}
+       */
+      var reverse = function (x) {
+        // 如果值为0就直接返回0,不进行后续运算
+        if (x === 0) return 0
+
+        // 获取最大值(2的31次方)-1
+        let max = Math.pow(2, 31) - 1
+        // 获取最小值(-2的31次方)
+        let min = Math.pow(-2, 31)
+
+        // 判断是否为-值,如果是就保存符号,不是就不保存
+        let symbolFu = x < 0 ? "-" : ""
+
+        x = symbolFu ? ("" + x).replace("-", "") : "" + x
+
+        // 获取翻转后的数字
+        let str = x.split("").reverse().join("")
+
+        // 翻转后有可能会将后方的0放在前面,判断前面是否有0,如果有0就去除0,循环去除,知道最后没有
+        while (str[0] === "0") {
+          str = clearZero(str)
+        }
+
+        // 裁减首位字符辅助方法
+        function clearZero(num) {
+          return num.substring(1)
+        }
+
+        // 判断最终值是否超出指定范围和小于指定范围
+        return Number(symbolFu + str) < max && Number(symbolFu + str) > min ? Number(symbolFu + str) : 0
+      }
+
+      console.log(reverse(-1534236469))
+    </script>
+  </body>
+</html>

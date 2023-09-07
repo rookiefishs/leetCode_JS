@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       *  N 字形变换
+       *
+       * 将一个给定字符串 s 根据给定的行数 numRows ，以从上往下、从左到右进行 Z 字形排列。
+       * 比如输入字符串为 "PAYPALISHIRING" 行数为 3 时，排列如下：
+       * P   A   H   N
+       * A P L S I I G
+       * Y   I   R
+       * 之后，你的输出需要从左往右逐行读取，产生出一个新的字符串，比如："PAHNAPLSIIGYIR"。
+       */
+
+      /**
+       * @param {string} s
+       * @param {number} numRows
+       * @return {string}
+       */
+      var convert = function (s, numRows) {
+        // 如果对应字符串只有一个或者两个字符时直接返回这个字符
+        if (s.length < 3) return s;
+
+        // 当前字符索引变量
+        let current = 0;
+
+        // 结果数组
+        let baseArr = [];
+
+        // 每隔多少行显示一次从头到尾没有空格的字符
+        let num = numRows - 2;
+
+        // 无限循环,直到找不到对应的字符
+        while (s[current]) {
+          // 根据当前字符和行数截取字符
+          let subStrArr = s.substr(current, numRows).split('');
+
+          // 判断截取的字符长度是否满足条件
+          if (subStrArr.length !== numRows) {
+            // 如果不满足就进行循环然后添加空格,将其转换为正确的格式
+            for (let i = 0; i < numRows; i++) {
+              subStrArr.push(' ');
+              if (subStrArr.length === numRows) {
+                break;
+              }
+            }
+
+            // 转换为正确格式后添加到数组中
+            baseArr.push(subStrArr);
+
+            // 退出while循环
+            break;
+          } else {
+            // 将截取结果添加至结果数组
+            baseArr.push(subStrArr);
+
+            // 截取结果添加数组后修改当前字符索引
+            current += numRows;
+
+            // 根据得到的|/|字形中的/部分从后向前实现添加数组
+            for (let i = num; i > 0; i--) {
+              // 当前/中的某一行数组
+              let spaceArr = [];
+              // 判断是否存在数据,如果不存在数据的话就跳过添加步骤
+              if (s[current]) {
+                // 二级循环,控制每一行中内容的个数
+                for (let j = 0; j < numRows; j++) {
+                  // 如果当前循环项j相当于i就表示应该在这里填入对应的字符,否则就填入空格,这也是为什么上面第一个for循环要--的原因
+                  if (j === i) {
+                    spaceArr.push(s[current]);
+
+                    // 每次字符添加成功后就将对应标识变量+1,便于后面使用
+                    current++;
+                  } else {
+                    spaceArr.push(' ');
+                  }
+                }
+                // 将每次生成的行数组添加到总数组中
+                baseArr.push(spaceArr);
+              }
+            }
+          }
+        }
+
+        // 如果最终数组只有一个就不用在进行后面的运算了,直接返回这个数组,并且将其转换为字符串替换掉空格
+        if (baseArr.length === 1) return baseArr[0].join('').replaceAll(' ', '');
+
+        // 最终结果字符串
+        let str = '';
+
+        // 循环numRows次,这是因为baseArr中的每个数组的长度都是numRows,这种方式可以保证数组中的每个元素字符都可以添加进去
+        for (let i = 0; i < numRows; i++) {
+          // 循环每个数组
+          baseArr.forEach(item => {
+            // 给字符串添加每个数组的第一项,第二项,第三项...随着for循环的变化而变化,并且判断当前项是否为空格,如果为空格就不进行拼接了
+            if (item[i] && item[i].trim()) {
+              str += item[i];
+            }
+          });
+        }
+        // 返回最终结果字符串
+        return str;
+      };
+      console.log(convert('ABCDEFG', 3));
+    </script>
+  </body>
+</html>

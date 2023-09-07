@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /* 
+      给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。算法的时间复杂度应该为 O(log (m+n)) 。
+       */
+      var findMedianSortedArrays = function (nums1, nums2) {
+        let arr = [...nums1, ...nums2];
+        arr.sort((a, b) => a - b);
+        if (arr.length % 2) {
+          let index = (arr.length + 1) / 2;
+          return arr[index - 1];
+        } else {
+          let index1 = arr.length / 2;
+          let index2 = arr.length / 2;
+          return (arr[index1 - 1] + arr[index2]) / 2;
+        }
+      };
+      console.log(findMedianSortedArrays([3], [-2, -1]));
+      /**
+       * 思路:
+       *  1.首先将两个数组合并得到新数组arr
+       *  2.对arr进行从小到大的排序,这里需要单独设置回调函数,因为有时的参数中包含负数
+       *  3.如果arr的长度是奇数,就拿到数组中间的数字并返回
+       *  4.如果arr的长度是偶数,就得到最中间的两个数字并求他们的平均值返回
+       */
+    </script>
+  </body>
+</html>

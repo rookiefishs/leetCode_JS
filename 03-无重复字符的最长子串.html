@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度
+      var lengthOfLongestSubstring = s => {
+        let str = '';
+        let arr = [];
+        for (let i = 0; i < s.length; i++) {
+          if (str.includes(s[i])) {
+            str = str.slice(str.indexOf(s[i]) + 1);
+          }
+          str += s[i];
+          arr.push(str.length);
+        }
+        arr.sort((a, b) => b - a);
+        return arr[0] || 0;
+      };
+      let s = 'abcabcbb';
+      console.log(lengthOfLongestSubstring(s));
+      /**
+       * 思路:
+       *  1.首先创建一个字符串变量,一个数组变量,用来保存数据和排除数据
+       *  2.对字符串进行循环,将每次循环到的字符添加进str中,并添加到arr数组中
+       *  3.如果发现此时循环到的字符在str中已经存在了,就以这个存在的字符的索引为起点+1截取掉
+       *  4.就相当于每次一有重复的字符就将str中的重复字符开始截取到最后,于是就以截取之后的数据为新的str,添加到arr中
+       *  5.对arr进行从大到小的排序,然后返回时如果arr是空的就默认返回0
+       */
+    </script>
+  </body>
+</html>

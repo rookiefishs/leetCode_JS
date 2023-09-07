@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 给你一个字符串 s，找到 s 中最长的回文子串。如果字符串的反序与原始字符串相同，则该字符串称为回文字符串。
+       * @param {string} s
+       * @return {string}
+       *
+       * s = "babad"  输出: "bab" 或 "aba"
+       * 补充: 看的解析
+       */
+      var longestPalindrome = function (s) {
+        // 定义一个len,表示当前字符串的长度
+        let len = s.length;
+        // 空字符串res,用于在后面进行赋值满足跳转的字符并返回
+        let res = '';
+
+        // 创建一个长度为len的数组,其中数组的所有元素都是undefined
+        // 创建一个长度为len的数组,其中数组的所有元素都是0
+        // 最终得到一个二维数组,二维数组一共有len的元素,每个元素都是一个数组,数组的长度也是len
+        let dp = Array.from(new Array(len), () => new Array(len).fill(0));
+
+        // 从字符串的最后一个字符开始遍历,这里的i是逐渐递减的
+        for (let i = len - 1; i >= 0; i--) {
+          // 从字符的最后一个字符开始向前遍历,这里的j会随着i的变化而变化,所以第一次i是最后一个字符,j就只会遍历一次,后面二级遍历的次数会逐渐增加
+          for (let j = i; j < len; j++) {
+            // s[i] == s[j]     判断字符串的首尾字符是否相等
+            // j - i < 2        判断字符串的长度是否小于2,如果小于2,就说明字符串的长度是0或者1,这两种情况都是回文字符串
+            // dp[i + 1][j - 1] 运行到这里就表示字符串的长度大于2,所以需要判断字符串的首尾字符是否为回文字符串
+            // 这里会根据当前的情况返回true或者false,只有首位字符相等,并且字符串的长度小于2,或者字符串的首尾字符相等,并且字符串的长度大于2,并且字符串的首尾字符是回文字符串,才会返回true
+            dp[i][j] = s[i] == s[j] && (j - i < 2 || dp[i + 1][j - 1]);
+
+            // dp[i][j] 根据上面的情况返回true或者false
+            // j - i + 1 > res.length 判断当前满足条件的回文字符串的长度是否大于res的长度,如果大于,就将当前的回文字符串赋值给res
+            if (dp[i][j] && j - i + 1 > res.length) {
+              // 将当前满足条件的回文字符串从s中截取出来并赋值给res
+              res = s.substring(i, j + 1);
+            }
+          }
+        }
+        return res;
+      };
+
+      console.log(longestPalindrome('anugnxshgonmqydttcvmtsoaprxnhpmpovdolbidqiyqubirkvhwppcdyeouvgedccipsvnobrccbndzjdbgxkzdbcjsjjovnhpnbkurxqfupiprpbiwqdnwaqvjbqoaqzkqgdxkfczdkznqxvupdmnyiidqpnbvgjraszbvvztpapxmomnghfaywkzlrupvjpcvascgvstqmvuveiiixjmdofdwyvhgkydrnfuojhzulhobyhtsxmcovwmamjwljioevhafdlpjpmqstguqhrhvsdvinphejfbdvrvabthpyyphyqharjvzriosrdnwmaxtgriivdqlmugtagvsoylqfwhjpmjxcysfujdvcqovxabjdbvyvembfpahvyoybdhweikcgnzrdqlzusgoobysfmlzifwjzlazuepimhbgkrfimmemhayxeqxynewcnynmgyjcwrpqnayvxoebgyjusppfpsfeonfwnbsdonucaipoafavmlrrlplnnbsaghbawooabsjndqnvruuwvllpvvhuepmqtprgktnwxmflmmbifbbsfthbeafseqrgwnwjxkkcqgbucwusjdipxuekanzwimuizqynaxrvicyzjhulqjshtsqswehnozehmbsdmacciflcgsrlyhjukpvosptmsjfteoimtewkrivdllqiotvtrubgkfcacvgqzxjmhmmqlikrtfrurltgtcreafcgisjpvasiwmhcofqkcteudgjoqqmtucnwcocsoiqtfuoazxdayricnmwcg'));
+    </script>
+  </body>
+</html>

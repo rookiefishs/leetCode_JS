@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       *  给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+       *  请你将两个数相加，并以相同形式返回一个表示和的链表。
+       *  你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+       */
+
+      // 链表构造函数
+      function ListNode(val, next) {
+        this.val = val === undefined ? 0 : val;
+        this.next = next === undefined ? null : next;
+      }
+      var addTwoNumbers = function (l1, l2) {
+        // 大数相加函数
+        function add(a, b) {
+          //取两个数字的最大长度
+          let maxLength = Math.max(a.length, b.length);
+          //用0去补齐长度
+          a = a.padStart(maxLength, 0); //"0009007199254740991"
+          b = b.padStart(maxLength, 0); //"1234567899999999999"
+          //定义加法过程中需要用到的变量
+          let t = 0;
+          let f = 0; //"进位"
+          let sum = '';
+          for (let i = maxLength - 1; i >= 0; i--) {
+            t = parseInt(a[i]) + parseInt(b[i]) + f;
+            f = Math.floor(t / 10);
+            sum = (t % 10) + sum;
+          }
+          if (f == 1) {
+            sum = '1' + sum;
+          }
+          return sum;
+        }
+
+        // 将指定数据转换为listNode形式的递归函数
+        function addObj(obj, num) {
+          if (num < target.split('').length) {
+            obj = new ListNode(target.split('')[num], obj || null);
+            obj.val = obj.val - 0;
+            num++;
+            obj.next = addObj(obj.next, num);
+          } else {
+            obj = null;
+          }
+          return obj;
+        }
+
+        // 定义l1,l2的数据标识
+        let num1 = (num2 = '');
+        // 循环获取l1和l2的数字
+        while (l1) {
+          num1 += l1.val + '';
+          l1 = l1.next;
+        }
+        while (l2) {
+          num2 += l2.val + '';
+          l2 = l2.next;
+        }
+        // 翻转l1和l2的数字
+        num1 = num1.split('').reverse().join('');
+        num2 = num2.split('').reverse().join('');
+        // 将l1和l2的数字相加
+        let target = add(num1, num2) + '';
+        // 将结果翻转
+        target = target.split('').reverse().join('');
+
+        // 如果结果是0就直接返回0
+        if (target === 0) {
+          return new ListNode(0);
+        } else {
+          // 定义空对象,用于返回结果
+          let obj = {};
+          // 指定索引
+          let num = 0;
+          // 如果结果不是0就使用递归将得到结果以listNode的形式循环出来并返回
+          obj = addObj(obj, num);
+          return obj;
+        }
+      };
+
+      var l1 = {
+        val: 1,
+        next: null,
+      };
+      var l2 = {
+        val: 5,
+        next: {
+          val: 6,
+          next: {
+            val: 4,
+            next: null,
+          },
+        },
+      };
+      addTwoNumbers(l1, l2);
+
+      /* 
+      思路:
+        1.首先在while循环中,将l1/l2的val已字符串的方式拼接到num1/num2中,每次拼接之后都会重新赋值l1/l2为下一个的next
+        2.直到next为null的时候,循环自动停止,此时将得到的num1/num2转换为字符串,然后再转换为数组,翻转再转换为字符串
+        3.定义大数相加函数,防止num1/num2过大影响结果,将num1+num2的结果返回给target
+        4.target转换为字符串,然后再转换为数组,翻转再转换为字符串,得到翻转后的target
+        5.判断target是否为0,如果为0就直接返回listNode(0)
+        6.如果不是0就定义递归函数,将target的结果递归为listNode树形结构并返回
+      */
+    </script>
+  </body>
+</html>
