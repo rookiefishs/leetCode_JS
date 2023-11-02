@@ -1,39 +1,93 @@
 <!--
 * @Author:WangZhiYu
 * @Date: 2023/08/12 16:57:40
-* @LastEditors: WangZhiYu
-* @LastEditTime: 2023/08/12 16:57:40
+ * @LastEditors: flash
+ * @LastEditTime: 2023-11-02 15:57:54
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      // 函数 myAtoi(string s) 的算法如下:
-      // 读入字符串并丢弃无用的前导空格
-      // 检查下一个字符(假设还未到字符末尾)为正还是负号,读取该字符(如果有). 确定最终结果是负数还是正数. 如果两者都不存在,则假定结果为正.
-      // 读入下一个字符,直到到达下一个非数字字符或到达输入的结尾.字符串的其余部分将被忽略.
-      // 将前面步骤读入的这些数字转换为整数(即,"123" -> 123, "0032" -> 32).如果没有读入数字,则整数为 0 .必要时更改符号(从步骤 2 开始).
-      // 如果整数数超过 32 位有符号整数范围 [−231,  231 − 1] ,需要截断这个整数,使其保持在这个范围内.具体来说,小于 −231 的整数应该被固定为 −231 ,大于 231 − 1 的整数应该被固定为 231 − 1 .
-      // 返回整数作为最终结果.
 
-      /**
-       * 字符串转换整数 (atoi)
-       * @param {string} s
-       * @return {number}
-       */
-      var myAtoi = function (s) {
-        for (let i = 0; i < s.length; i++) {
-          const element = s[i]
-          console.log()
-        }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 函数 myAtoi(string s) 的算法如下:
+    // 读入字符串并丢弃无用的前导空格
+    // 检查下一个字符(假设还未到字符末尾)为正还是负号,读取该字符(如果有). 确定最终结果是负数还是正数. 如果两者都不存在,则假定结果为正.
+    // 读入下一个字符,直到到达下一个非数字字符或到达输入的结尾.字符串的其余部分将被忽略.
+    // 将前面步骤读入的这些数字转换为整数(即,"123" -> 123, "0032" -> 32).如果没有读入数字,则整数为 0 .必要时更改符号(从步骤 2 开始).
+    // 如果整数数超过 32 位有符号整数范围 [−231,  231 − 1] ,需要截断这个整数,使其保持在这个范围内.具体来说,小于 −231 的整数应该被固定为 −231 ,大于 231 − 1 的整数应该被固定为 231 − 1 .
+    // 返回整数作为最终结果.
+
+    /**
+     * 字符串转换整数 (atoi)
+     * @param {string} s
+     * @return {number}
+     */
+    var myAtoi = function (s) {
+      // 将传入的字符去除首尾空格
+      let str = s.trim()
+
+      // 获取边界值最小值
+      let min = Math.pow(-2, 31)
+
+      // 获取边界值最大值
+      let max = Math.pow(2, 31) - 1
+
+      // 创建最终结果变量
+      let result = ''
+
+      // 遍历传入的字符,进行处理
+      for (let i = 0; i < str.length; i++) {
+        // 获取当前循环的字符
+        const s = str[i];
+
+        // 当前字符为空格,并且之前没有结果的情况下,
+        if (s === ' ' && result) return handlingBoundarySituations(result)
+
+        // 如果当前结果字符串中纯在数据,并且当前的字符为-或者+时,就相当于123+,此时不将+或-拼接到结果字符串中,直接处理结果字符串并返回
+        if (result.length !== 0 && (s === '-' || s === '+')) return handlingBoundarySituations(result)
+
+        // (判断当前字符是否为-或+)  (当前字符是+或-,如果下一个字符还是+或-并其在字符的最开头为+-或-+,就直接返回0)
+        if ((s === '-' || s === '+') && (str[i + 1] === '+' || str[i + 1] === '-' && (i === 0))) return 0
+
+        // 判断当前的字符是否为数字或者为+和-,如果满足情况,就将其拼接到结果数组中
+        // if (!isNaN(Number(s)) || s === '-' || s === '+') {
+        //   // 拼接到结果数组中
+        //   result += s
+        // } else {
+        //   // 如果字符不是数字或者+和-,则直接返回并处理已有的结果数组
+        //   return handlingBoundarySituations(result)
+        // }
+
+        // 判断当前的字符是否为数字或者为+和-,如果满足情况,就将其拼接到结果数组中
+        if (!isNaN(Number(s)) || s === '-' || s === '+') result += s
+        // 如果字符不是数字或者+和-,则直接返回并处理已有的结果数组
+        else return handlingBoundarySituations(result)
       }
 
-      console.log(myAtoi("4193 with words"))
-    </script>
-  </body>
+      // 辅助函数,处理边界情况
+      function handlingBoundarySituations(value) {
+        // 将结果字符转换为数字类型
+        let data = Number(value)
+
+        // 判断是否为一个NaN, 如果是NaN就直接返回0
+        if (isNaN(data)) return 0
+
+        // 判断是否超出最大值,如果超出最大值,就直接返回最大值,判断是否超出最小值,如果超出最小值,就直接返回最小值
+        return data >= max ? max : data <= min ? min : data
+      }
+
+      // 没有任何其余情况,正常返回处理过的字符数据
+      return handlingBoundarySituations(result)
+    }
+
+    console.log(myAtoi("asda-41931-"))
+  </script>
+</body>
+
 </html>
